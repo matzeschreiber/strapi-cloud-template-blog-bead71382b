@@ -5,8 +5,18 @@ module.exports = [
   'strapi::cors',
   'strapi::poweredBy',
   'strapi::query',
-  'strapi::body',
   'strapi::session',
   'strapi::favicon',
   'strapi::public',
+  {
+    name: "strapi::body",
+    config: {
+      jsonLimit: "20mb",
+      formLimit: "20mb",
+      textLimit: "20mb",
+      formidable: {
+        maxFileSize: 20 * 1024 * 1024,
+      },
+    },
+  }
 ];
