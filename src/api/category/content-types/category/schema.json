@@ -26,6 +26,21 @@
     },
     "description": {
       "type": "text"
+    },
+    "websites": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::website.website",
+      "mappedBy": "categories"
+    },
+    "subcategory": {
+      "type": "enumeration",
+      "enum": [
+        "technology",
+        "design",
+        "general"
+      ],
+      "default": "general"
     }
   }
 }

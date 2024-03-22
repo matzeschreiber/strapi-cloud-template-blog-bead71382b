@@ -887,6 +887,11 @@ export interface ApiAuthorAuthor extends Schema.CollectionType {
       'api::article.article'
     >;
     Website: Attribute.String;
+    websites: Attribute.Relation<
+      'api::author.author',
+      'oneToMany',
+      'api::website.website'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -924,6 +929,13 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
       'api::article.article'
     >;
     description: Attribute.Text;
+    websites: Attribute.Relation<
+      'api::category.category',
+      'manyToMany',
+      'api::website.website'
+    >;
+    subcategory: Attribute.Enumeration<['technology', 'design', 'general']> &
+      Attribute.DefaultTo<'general'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -974,6 +986,56 @@ export interface ApiGlobalGlobal extends Schema.SingleType {
   };
 }
 
+export interface ApiWebsiteWebsite extends Schema.CollectionType {
+  collectionName: 'websites';
+  info: {
+    singularName: 'website';
+    pluralName: 'websites';
+    displayName: 'Website';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    url: Attribute.String;
+    description: Attribute.Text;
+    performance: Attribute.Integer;
+    accessibility: Attribute.Integer;
+    bestpractise: Attribute.Integer;
+    seo: Attribute.Integer & Attribute.DefaultTo<0>;
+    author: Attribute.Relation<
+      'api::website.website',
+      'manyToOne',
+      'api::author.author'
+    >;
+    desktopimages: Attribute.Media;
+    mobileimages: Attribute.Media;
+    categories: Attribute.Relation<
+      'api::website.website',
+      'manyToMany',
+      'api::category.category'
+    >;
+    addeddate: Attribute.Date;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::website.website',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::website.website',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -997,6 +1059,7 @@ declare module '@strapi/types' {
       'api::author.author': ApiAuthorAuthor;
       'api::category.category': ApiCategoryCategory;
       'api::global.global': ApiGlobalGlobal;
+      'api::website.website': ApiWebsiteWebsite;
     }
   }
 }
